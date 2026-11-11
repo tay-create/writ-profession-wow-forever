@@ -16,6 +16,10 @@ local function showProfession(tooltip, itemID)
     end
 
     tooltip:AddLine("|cff33ff99" .. addon.professionLabel .. ": " .. table.concat(names, " / ") .. "|r")
+    local reputation = addon.GetWritReputation(itemID)
+    if reputation then
+        tooltip:AddLine("|cff66ccff" .. addon.reputationLabel .. ": +" .. reputation .. "|r")
+    end
     if tooltip.Show then
         tooltip:Show()
     end

@@ -4,6 +4,19 @@
 --                     4 Leatherworking, 5 Tailoring.
 local _, addon = ...
 
+-- Writ quest reputation, grouped by rank in the Forever item ID catalog.
+-- Journeyman 264011-264055: 75, Expert 264056-264115: 125,
+-- Artisan 264116-264160: 200.
+function addon.GetWritReputation(itemID)
+    if itemID >= 264011 and itemID <= 264055 then
+        return 75
+    elseif itemID >= 264056 and itemID <= 264115 then
+        return 125
+    elseif itemID >= 264116 and itemID <= 264160 then
+        return 200
+    end
+end
+
 addon.writs = {
     [264011] = { 1 }, -- Elixir of Ogre's Strength
     [264012] = { 1 }, -- Elixir of Wisdom

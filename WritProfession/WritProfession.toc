@@ -1,9 +1,12 @@
 ## Interface: 16001
 ## Title: Writ Profession
-## Notes: Shows the profession required by Craftsman's Writs in tooltips.
-## Version: 0.1.0-alpha
+## Notes: Identifies Craftsman's Writ professions and filters writs in Auctionator.
+## Version: 0.2.0-alpha
 ## Author: tay-create
+## OptionalDeps: Auctionator
 
 Data.lua
 Locales.lua
 Core.lua
+AuctionTab.lua
+AuctionTab.xml

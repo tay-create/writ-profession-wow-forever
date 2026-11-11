@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0-alpha - 2026-11-11
+
+- Adds an Auctionator Auction House tab for filtering writs by profession or name.
+- Clicking a writ searches it in Auctionator; the search button queries all filtered writs.
+- Shows +75 / +125 / +200 reputation per writ in the tab and item tooltips.
+- Localizes the filter UI and reputation label to the game client's locale.
+
 ## 0.1.0-alpha - 2026-11-11
 
 - First test build for WoW Forever 1.60.1 (interface 16001).
