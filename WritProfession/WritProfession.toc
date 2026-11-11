@@ -1,0 +1,9 @@
+## Interface: 16001
+## Title: Writ Profession
+## Notes: Shows the profession required by Craftsman's Writs in tooltips.
+## Version: 0.1.0-alpha
+## Author: tay-create
+
+Data.lua
+Locales.lua
+Core.lua
