@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0-alpha - 2026-11-11
+
+- Adds the crafted item, crafting skill, recipe name and acquisition-source type to writ tooltips.
+- Includes recipe metadata for all 150 writs; 99 Classic Era recipe-item IDs for localization and lookup (including a normalized spelling), and explicitly marks sources that could not be verified.
+- Adds a quantity field (1–999), forwarding the target to Auctionator Shopping as an advanced search parameter.
+- Right-clicking a writ searches its separate recipe item through Auctionator; item names are localized when available.
+- Retains Auctionator's native buying flow and documents the one-stack-per-click behavior on the Legacy Auction House.
+
+
 ## 0.2.0-alpha - 2026-11-11
 
 - Adds an Auctionator Auction House tab for filtering writs by profession or name.

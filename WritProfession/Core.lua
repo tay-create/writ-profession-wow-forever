@@ -1,5 +1,39 @@
 local _, addon = ...
 
+local function getCraftedItemName(recipe)
+    if recipe.itemID then
+        local name = GetItemInfo(recipe.itemID)
+        if not name and C_Item and C_Item.GetItemNameByID then
+            name = C_Item.GetItemNameByID(recipe.itemID)
+        end
+        if name then
+            return name
+        end
+    end
+    return recipe.name
+end
+
+local function getRecipeSource(recipe)
+    local ui = addon.recipeSourceText
+    if recipe.sourceNPC then
+        return recipe.sourceNPC
+    end
+    if recipe.sourceType == "vendor" then
+        return recipe.sourceLocation and ui.vendorAt:format(recipe.sourceLocation) or ui.vendor
+    elseif recipe.sourceType == "drop" then
+        return ui.drop
+    elseif recipe.sourceType == "quest" then
+        return recipe.sourceLocation and ui.questAt:format(recipe.sourceLocation) or ui.quest
+    elseif recipe.sourceType == "dungeon" then
+        return ui.dungeon:format(recipe.sourceLocation or ui.unknownLocation)
+    elseif recipe.sourceType == "raid" then
+        return ui.raid:format(recipe.sourceLocation or ui.unknownLocation)
+    elseif recipe.sourceType == "crafted" then
+        return ui.crafted:format(addon.professionNames[recipe.sourceProfession] or ui.unknownLocation)
+    end
+    return ui.unknown
+end
+
 local function showProfession(tooltip, itemID)
     if not tooltip or not tooltip.AddLine then
         return
@@ -19,6 +53,34 @@ local function showProfession(tooltip, itemID)
     local reputation = addon.GetWritReputation(itemID)
     if reputation then
         tooltip:AddLine("|cff66ccff" .. addon.reputationLabel .. ": +" .. reputation .. "|r")
+    end
+
+    local recipe = addon.recipeData[itemID]
+    if recipe then
+        local ui = addon.uiText
+        tooltip:AddLine(" ")
+        tooltip:AddLine("|cffffd466" .. ui.craftedItem .. ":|r " .. getCraftedItemName(recipe), 1, 1, 1)
+        local skill = tostring(recipe.skill)
+        if recipe.skillApproximate then
+            skill = ui.skillApproximate:format(skill)
+        end
+        tooltip:AddLine("|cffffd466" .. ui.recipeSkill .. ":|r " .. skill, 1, 1, 1)
+
+        if recipe.learnMode == "trainer" then
+            tooltip:AddLine("|cffffd466" .. ui.recipe .. ":|r " .. ui.trainer, 1, 1, 1)
+            tooltip:AddLine("|cffffd466" .. ui.recipeSource .. ":|r " .. ui.trainerSource, 1, 1, 1)
+        else
+            local recipeName = recipe.recipeItemID and GetItemInfo(recipe.recipeItemID)
+            if not recipeName and recipe.recipeItemID and C_Item and C_Item.GetItemNameByID then
+                recipeName = C_Item.GetItemNameByID(recipe.recipeItemID)
+            end
+            if not recipeName and recipe.recipeItemID and C_Item and C_Item.RequestLoadItemDataByID then
+                C_Item.RequestLoadItemDataByID(recipe.recipeItemID)
+            end
+            tooltip:AddLine("|cffffd466" .. ui.recipe .. ":|r " .. (recipeName or recipe.recipeName), 1, 1, 1)
+            tooltip:AddLine("|cffffd466" .. ui.recipeSource .. ":|r " ..
+                getRecipeSource(recipe), 1, 1, 1)
+        end
     end
     if tooltip.Show then
         tooltip:Show()

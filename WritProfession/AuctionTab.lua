@@ -43,6 +43,7 @@ end
 
 local function createRow(parent)
     local row = CreateFrame("Button", nil, parent)
+    row:RegisterForClicks("LeftButtonUp", "RightButtonUp")
     row:SetHeight(rowHeight)
     row:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
     row:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD")
@@ -71,13 +72,23 @@ local function createRow(parent)
         else
             GameTooltip:SetHyperlink("item:" .. button.itemID)
         end
+        local recipe = addon.recipeData[button.itemID]
+        if recipe and recipe.learnMode == "item" then
+            GameTooltip:AddLine(" ")
+            GameTooltip:AddLine(ui.rightClickRecipe, 0.45, 0.95, 0.45)
+        end
         GameTooltip:Show()
     end)
     row:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
-    row:SetScript("OnClick", function(button)
-        parent:GetParent():GetParent():SearchItems({ button.itemID })
+    row:SetScript("OnClick", function(button, mouseButton)
+        local frame = parent:GetParent():GetParent()
+        if mouseButton == "RightButton" then
+            frame:SearchRecipe(button.itemID)
+        else
+            frame:SearchItems({ button.itemID })
+        end
     end)
     return row
 end
@@ -123,6 +134,24 @@ function WritProfessionAuctionTabMixin:OnLoad()
         self:UpdateItems(false)
     end)
 
+    createText(self, "GameFontNormal", ui.quantity, "TOPLEFT", "TOPLEFT", 555, -4)
+    self.quantityBox = CreateFrame("EditBox", nil, self, "InputBoxTemplate")
+    self.quantityBox:SetAutoFocus(false)
+    self.quantityBox:SetNumeric(true)
+    self.quantityBox:SetMaxLetters(3)
+    self.quantityBox:SetSize(72, 23)
+    self.quantityBox:SetPoint("TOPLEFT", self, "TOPLEFT", 564, -29)
+    self.quantityBox:SetNumber(1)
+    self.quantityBox:SetScript("OnEscapePressed", function(box)
+        box:ClearFocus()
+    end)
+    self.quantityBox:SetScript("OnEnterPressed", function(box)
+        box:ClearFocus()
+    end)
+    self.quantityBox:SetScript("OnEditFocusLost", function(box)
+        box:SetNumber(math.max(1, math.min(999, box:GetNumber())))
+    end)
+
     self.list = CreateFrame("ScrollFrame", nil, self, "UIPanelScrollFrameTemplate")
     self.list:SetPoint("TOPLEFT", self, "TOPLEFT", 209, -62)
     self.list:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -29, 48)
@@ -148,6 +177,13 @@ function WritProfessionAuctionTabMixin:OnLoad()
 
     self:RegisterEvent("GET_ITEM_INFO_RECEIVED")
     self:SetScript("OnEvent", function(frame, _, itemID)
+        if frame.pendingRecipeItemID == itemID then
+            local recipeName = getItemName(itemID)
+            if recipeName then
+                frame.pendingRecipeItemID = nil
+                frame:SearchTerms({ recipeName }, 1)
+            end
+        end
         if addon.writs[itemID] and frame:IsShown() then
             frame:UpdateItems(true)
         end
@@ -235,6 +271,40 @@ function WritProfessionAuctionTabMixin:UpdateItems(keepScroll)
     self.searchButton:SetEnabled(#filtered > 0 and loaded == #filtered)
 end
 
+function WritProfessionAuctionTabMixin:GetPurchaseQuantity()
+    return math.max(1, math.min(999, self.quantityBox:GetNumber()))
+end
+
+function WritProfessionAuctionTabMixin:SearchRecipe(itemID)
+    local recipe = addon.recipeData[itemID]
+    if not recipe or recipe.learnMode ~= "item" then
+        return
+    end
+    if recipe.recipeItemID then
+        local localizedName = getItemName(recipe.recipeItemID)
+        if localizedName then
+            self:SearchTerms({ localizedName }, 1)
+            return
+        end
+        if C_Item and C_Item.RequestLoadItemDataByID then
+            self.pendingRecipeItemID = recipe.recipeItemID
+            C_Item.RequestLoadItemDataByID(recipe.recipeItemID)
+            return
+        end
+        if Item and Item.CreateFromItemID then
+            self.pendingRecipeItemID = recipe.recipeItemID
+            Item:CreateFromItemID(recipe.recipeItemID):ContinueOnItemLoad(function()
+                if self.pendingRecipeItemID == recipe.recipeItemID then
+                    self.pendingRecipeItemID = nil
+                    self:SearchTerms({ getItemName(recipe.recipeItemID) or recipe.recipeName }, 1)
+                end
+            end)
+            return
+        end
+    end
+    self:SearchTerms({ recipe.recipeName }, 1)
+end
+
 function WritProfessionAuctionTabMixin:SearchItems(itemIDs)
     local terms = {}
     for _, itemID in ipairs(itemIDs) do
@@ -242,7 +312,23 @@ function WritProfessionAuctionTabMixin:SearchItems(itemIDs)
         if not name then
             return
         end
-        table.insert(terms, '"' .. name .. '"')
+        table.insert(terms, name)
+    end
+    self:SearchTerms(terms, self:GetPurchaseQuantity())
+end
+
+function WritProfessionAuctionTabMixin:SearchTerms(names, quantity)
+    local terms = {}
+    for _, name in ipairs(names) do
+        if Auctionator and Auctionator.Search and Auctionator.Search.ReconstituteAdvancedSearch then
+            table.insert(terms, Auctionator.Search.ReconstituteAdvancedSearch({
+                searchString = name,
+                isExact = true,
+                quantity = quantity,
+            }))
+        else
+            table.insert(terms, '"' .. name .. '"')
+        end
     end
 
     if #terms == 0 then

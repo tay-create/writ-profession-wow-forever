@@ -74,7 +74,102 @@ local ui = {
 
 ui.enGB = ui.enUS
 ui.esMX = ui.esES
+
+local recipeUI = {
+    enUS = {
+        quantity = "Quantity", craftedItem = "Required item", recipeSkill = "Crafting skill",
+        skillApproximate = "about %s (yellow)", recipe = "Recipe", recipeSource = "Where to learn",
+        trainer = "Profession trainer", trainerSource = "Visit a profession trainer",
+        scrollSource = "Recipe item: check vendors, loot, quests or Auctionator",
+        rightClickRecipe = "Right-click to search the recipe in Auctionator",
+    },
+    ptBR = {
+        quantity = "Quantidade", craftedItem = "Item solicitado", recipeSkill = "Habilidade",
+        skillApproximate = "aprox. %s (amarelo)", recipe = "Receita", recipeSource = "Onde aprender",
+        trainer = "Instrutor de profissão", trainerSource = "Aprenda com um instrutor da profissão",
+        scrollSource = "Receita avulsa: veja vendedores, saques, missões ou leilão",
+        rightClickRecipe = "Botão direito: buscar a receita no Auctionator",
+    },
+    esES = {
+        quantity = "Cantidad", craftedItem = "Objeto necesario", recipeSkill = "Habilidad",
+        skillApproximate = "aprox. %s (amarillo)", recipe = "Receta", recipeSource = "Dónde aprender",
+        trainer = "Instructor de profesión", trainerSource = "Aprender con un instructor de profesión",
+        scrollSource = "Receta: consultar vendedores, botín, misiones o subasta",
+        rightClickRecipe = "Clic derecho para buscar la receta en Auctionator",
+    },
+    frFR = {
+        quantity = "Quantité", craftedItem = "Objet demandé", recipeSkill = "Compétence",
+        skillApproximate = "env. %s (jaune)", recipe = "Recette", recipeSource = "Où apprendre",
+        trainer = "Maître de métier", trainerSource = "Apprendre auprès d'un maître de métier",
+        scrollSource = "Recette à trouver : vendeurs, butin, quêtes ou enchères",
+        rightClickRecipe = "Clic droit : chercher la recette dans Auctionator",
+    },
+    deDE = {
+        quantity = "Anzahl", craftedItem = "Benötigter Gegenstand", recipeSkill = "Fertigkeit",
+        skillApproximate = "ca. %s (gelb)", recipe = "Rezept", recipeSource = "Fundort",
+        trainer = "Berufslehrer", trainerSource = "Beim Berufslehrer lernen",
+        scrollSource = "Rezept: Händler, Beute, Quests oder Auktionshaus",
+        rightClickRecipe = "Rechtsklick: Rezept in Auctionator suchen",
+    },
+    itIT = {
+        quantity = "Quantità", craftedItem = "Oggetto richiesto", recipeSkill = "Abilità",
+        skillApproximate = "circa %s (giallo)", recipe = "Ricetta", recipeSource = "Dove imparare",
+        trainer = "Istruttore di professione", trainerSource = "Impara da un istruttore",
+        scrollSource = "Ricetta: mercanti, bottino, missioni o casa d'aste",
+        rightClickRecipe = "Clic destro: cerca la ricetta in Auctionator",
+    },
+    ruRU = {
+        quantity = "Количество", craftedItem = "Нужный предмет", recipeSkill = "Навык",
+        skillApproximate = "около %s (жёлтый)", recipe = "Рецепт", recipeSource = "Где получить",
+        trainer = "Учитель профессии", trainerSource = "Обучение у учителя профессии",
+        scrollSource = "Рецепт: торговцы, добыча, задания или аукцион",
+        rightClickRecipe = "ПКМ: поиск рецепта в Auctionator",
+    },
+    koKR = {
+        quantity = "수량", craftedItem = "필요한 아이템", recipeSkill = "숙련도",
+        skillApproximate = "약 %s (노란색)", recipe = "도안", recipeSource = "습득 방법",
+        trainer = "전문 기술 상급자", trainerSource = "전문 기술 상급자에게 배우기",
+        scrollSource = "도안: 상인, 전리품, 퀘스트 또는 경매장",
+        rightClickRecipe = "오른쪽 클릭: Auctionator에서 도안 검색",
+    },
+    zhCN = {
+        quantity = "数量", craftedItem = "所需物品", recipeSkill = "技能等级",
+        skillApproximate = "约 %s（黄色）", recipe = "配方", recipeSource = "获取方式",
+        trainer = "专业训练师", trainerSource = "向专业训练师学习",
+        scrollSource = "配方：商人、掉落、任务或拍卖行",
+        rightClickRecipe = "右键在 Auctionator 搜索配方",
+    },
+    zhTW = {
+        quantity = "數量", craftedItem = "需求物品", recipeSkill = "技能等級",
+        skillApproximate = "約 %s（黃色）", recipe = "配方", recipeSource = "取得方式",
+        trainer = "專業訓練師", trainerSource = "向專業訓練師學習",
+        scrollSource = "配方：商人、掉落、任務或拍賣場",
+        rightClickRecipe = "右鍵在 Auctionator 搜尋配方",
+    },
+}
+recipeUI.enGB = recipeUI.enUS
+recipeUI.esMX = recipeUI.esES
+
+local sourceUI = {
+    enUS = { vendor = "Vendor", vendorAt = "Vendor in %s", drop = "World loot / enemy drop", quest = "Quest reward", questAt = "Quest in %s", dungeon = "Dungeon: %s", raid = "Raid: %s", crafted = "Made through %s", unknown = "Source not confirmed", unknownLocation = "unknown location" },
+    ptBR = { vendor = "Vendedor", vendorAt = "Vendedor em %s", drop = "Saque de inimigos / mundo aberto", quest = "Recompensa de missão", questAt = "Missão em %s", dungeon = "Masmorra: %s", raid = "Raide: %s", crafted = "Produzida com %s", unknown = "Origem não confirmada", unknownLocation = "local desconhecido" },
+    esES = { vendor = "Vendedor", vendorAt = "Vendedor en %s", drop = "Botín de enemigos / mundo", quest = "Recompensa de misión", questAt = "Misión en %s", dungeon = "Mazmorra: %s", raid = "Banda: %s", crafted = "Elaborada con %s", unknown = "Origen sin confirmar", unknownLocation = "lugar desconocido" },
+    frFR = { vendor = "Marchand", vendorAt = "Marchand à %s", drop = "Butin du monde / ennemis", quest = "Récompense de quête", questAt = "Quête à %s", dungeon = "Donjon : %s", raid = "Raid : %s", crafted = "Fabriquée via %s", unknown = "Source non confirmée", unknownLocation = "lieu inconnu" },
+    deDE = { vendor = "Händler", vendorAt = "Händler in %s", drop = "Weltbeute / Gegner", quest = "Questbelohnung", questAt = "Quest in %s", dungeon = "Dungeon: %s", raid = "Schlachtzug: %s", crafted = "Hergestellt durch %s", unknown = "Herkunft unbekannt", unknownLocation = "unbekannter Ort" },
+    itIT = { vendor = "Mercante", vendorAt = "Mercante a %s", drop = "Bottino del mondo / nemici", quest = "Ricompensa missione", questAt = "Missione a %s", dungeon = "Spedizione: %s", raid = "Incursione: %s", crafted = "Creata con %s", unknown = "Fonte non confermata", unknownLocation = "luogo sconosciuto" },
+    ruRU = { vendor = "Торговец", vendorAt = "Торговец в %s", drop = "Добыча с противников", quest = "Награда за задание", questAt = "Задание в %s", dungeon = "Подземелье: %s", raid = "Рейд: %s", crafted = "Создается с помощью %s", unknown = "Источник не подтвержден", unknownLocation = "неизвестно" },
+    koKR = { vendor = "상인", vendorAt = "%s 상인", drop = "야외 전리품", quest = "퀘스트 보상", questAt = "%s 퀘스트", dungeon = "던전: %s", raid = "공격대: %s", crafted = "%s로 제작", unknown = "획득처 미확인", unknownLocation = "불명" },
+    zhCN = { vendor = "商人", vendorAt = "%s 的商人", drop = "世界掉落", quest = "任务奖励", questAt = "%s 的任务", dungeon = "地下城：%s", raid = "团队副本：%s", crafted = "通过%s制作", unknown = "来源未确认", unknownLocation = "未知地点" },
+    zhTW = { vendor = "商人", vendorAt = "%s 的商人", drop = "世界掉落", quest = "任務獎勵", questAt = "%s 的任務", dungeon = "地城：%s", raid = "團隊副本：%s", crafted = "透過%s製作", unknown = "來源未確認", unknownLocation = "未知地點" },
+}
+sourceUI.enGB = sourceUI.enUS
+sourceUI.esMX = sourceUI.esES
+addon.recipeSourceText = sourceUI[locale] or sourceUI.enUS
+
 addon.uiText = ui[locale] or ui.enUS
+for key, value in pairs(recipeUI[locale] or recipeUI.enUS) do
+    addon.uiText[key] = value
+end
 
 local reputationLabels = {
     enUS = "Reputation",
