@@ -82,6 +82,26 @@ local function showProfession(tooltip, itemID)
                 getRecipeSource(recipe), 1, 1, 1)
         end
     end
+
+    local delivery = addon.deliveryData[itemID]
+    if delivery then
+        local ui = addon.uiText
+        tooltip:AddLine(" ")
+        if delivery.npc then
+            tooltip:AddLine("|cff8ed6ff" .. ui.deliveryNPC .. ":|r " .. delivery.npc, 1, 1, 1)
+        elseif delivery.object then
+            tooltip:AddLine("|cff8ed6ff" .. ui.deliveryObject .. ":|r " .. delivery.object, 1, 1, 1)
+        end
+        if delivery.zone then
+            local location = delivery.zone
+            if delivery.x and delivery.y then
+                location = string.format("%s (%.1f, %.1f)", location, delivery.x, delivery.y)
+            end
+            tooltip:AddLine("|cff8ed6ff" .. ui.deliveryLocation .. ":|r " .. location, 1, 1, 1)
+        elseif not delivery.npc and not delivery.object then
+            tooltip:AddLine("|cff8ed6ff" .. ui.deliveryLocation .. ":|r " .. ui.deliveryUnconfirmed, 1, 1, 1)
+        end
+    end
     if tooltip.Show then
         tooltip:Show()
     end

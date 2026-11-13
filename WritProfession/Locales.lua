@@ -75,6 +75,39 @@ local ui = {
 ui.enGB = ui.enUS
 ui.esMX = ui.esES
 
+local filterUI = {
+    enUS = {
+        reputationFilter = "Reputation", skillFilter = "Crafting skill", skillUpTo = "Up to %d",
+        newsButton = "What's new", newsTitle = "Writ Profession update", newsClose = "Got it!",
+        newsIntro = "Hello! We've refreshed the Writs tab and added reputation and crafting skill filters. You can combine them with profession and name searches to find what you need more easily.",
+        newsDetails = "We're also working on the delivery locations. So far, we've tracked down where to turn in 107 of the 150 writs. The other 43 still need confirmation. Some writs share the same NPC, and information about WoW Forever isn't always complete. That's why some entries say 'Not confirmed' for now. We'd rather be upfront than send you to the wrong place. If you discover one of the missing locations, please share it with us. Every bit of help makes the addon better. Thanks for being here!",
+    },
+    ptBR = {
+        reputationFilter = "Reputação", skillFilter = "Habilidade da profissão", skillUpTo = "Até %d",
+        newsButton = "Novidades", newsTitle = "Novidades do Writ Profession", newsClose = "Entendi!",
+        newsIntro = "Oi! A aba de Escrituras ganhou um visual renovado e dois filtros novos: reputação e habilidade da profissão. Você pode combinar tudo com a profissão escolhida e a busca por nome para encontrar suas escrituras com mais facilidade.",
+        newsDetails = "Também seguimos procurando os locais de entrega. Já encontramos o destino de 107 das 150 escrituras, mas ainda faltam 43 para confirmar. Algumas são entregues ao mesmo NPC e nem sempre as informações disponíveis sobre o WoW Forever mostram todos os detalhes. Por isso, em algumas delas você vai encontrar 'Ainda não confirmado'. Preferimos ser sinceros a mandar você para o lugar errado. Se descobrir algum local que está faltando, conte pra gente! Cada ajuda faz diferença. Obrigado por acompanhar o projeto!",
+    },
+    esES = { reputationFilter = "Reputación", skillFilter = "Habilidad profesional", skillUpTo = "Hasta %d", newsButton = "Novedades", newsTitle = "Actualización de Writ Profession", newsClose = "Entendido" },
+    frFR = { reputationFilter = "Réputation", skillFilter = "Compétence", skillUpTo = "Jusqu'à %d", newsButton = "Nouveautés", newsTitle = "Mise à jour Writ Profession", newsClose = "Compris" },
+    deDE = { reputationFilter = "Ruf", skillFilter = "Berufsfertigkeit", skillUpTo = "Bis %d", newsButton = "Neuigkeiten", newsTitle = "Writ Profession Update", newsClose = "Verstanden" },
+    itIT = { reputationFilter = "Reputazione", skillFilter = "Abilità professionale", skillUpTo = "Fino a %d", newsButton = "Novità", newsTitle = "Aggiornamento Writ Profession", newsClose = "Capito" },
+    ruRU = { reputationFilter = "Репутация", skillFilter = "Навык профессии", skillUpTo = "До %d", newsButton = "Что нового", newsTitle = "Обновление Writ Profession", newsClose = "Понятно" },
+    koKR = { reputationFilter = "평판", skillFilter = "전문 기술 숙련도", skillUpTo = "%d 이하", newsButton = "새 소식", newsTitle = "Writ Profession 업데이트", newsClose = "확인" },
+    zhCN = { reputationFilter = "声望", skillFilter = "专业技能", skillUpTo = "不高于%d", newsButton = "更新内容", newsTitle = "Writ Profession 更新", newsClose = "知道了" },
+    zhTW = { reputationFilter = "聲望", skillFilter = "專業技能", skillUpTo = "不高於%d", newsButton = "更新內容", newsTitle = "Writ Profession 更新", newsClose = "知道了" },
+}
+filterUI.enGB = filterUI.enUS
+filterUI.esMX = filterUI.esES
+
+for _, labelsForLocale in pairs(filterUI) do
+    for key, value in pairs(filterUI.enUS) do
+        if labelsForLocale[key] == nil then
+            labelsForLocale[key] = value
+        end
+    end
+end
+
 local recipeUI = {
     enUS = {
         quantity = "Quantity", craftedItem = "Required item", recipeSkill = "Crafting skill",
@@ -167,7 +200,28 @@ sourceUI.esMX = sourceUI.esES
 addon.recipeSourceText = sourceUI[locale] or sourceUI.enUS
 
 addon.uiText = ui[locale] or ui.enUS
+for key, value in pairs(filterUI[locale] or filterUI.enUS) do
+    addon.uiText[key] = value
+end
 for key, value in pairs(recipeUI[locale] or recipeUI.enUS) do
+    addon.uiText[key] = value
+end
+
+local deliveryUI = {
+    enUS = { deliveryNPC = "Turn in to", deliveryObject = "Turn in at object", deliveryLocation = "Turn-in location", deliveryUnconfirmed = "Not confirmed" },
+    ptBR = { deliveryNPC = "Entregar para", deliveryObject = "Entregar no objeto", deliveryLocation = "Local de entrega", deliveryUnconfirmed = "Ainda não confirmado" },
+    esES = { deliveryNPC = "Entregar a", deliveryObject = "Entregar en objeto", deliveryLocation = "Lugar de entrega", deliveryUnconfirmed = "Sin confirmar" },
+    frFR = { deliveryNPC = "Remettre à", deliveryObject = "Remettre à l’objet", deliveryLocation = "Lieu de remise", deliveryUnconfirmed = "Non confirmé" },
+    deDE = { deliveryNPC = "Abgeben bei", deliveryObject = "Abgabe am Objekt", deliveryLocation = "Abgabeort", deliveryUnconfirmed = "Nicht bestätigt" },
+    itIT = { deliveryNPC = "Consegna a", deliveryObject = "Consegna all’oggetto", deliveryLocation = "Luogo di consegna", deliveryUnconfirmed = "Non confermato" },
+    ruRU = { deliveryNPC = "Сдать", deliveryObject = "Сдать у объекта", deliveryLocation = "Место сдачи", deliveryUnconfirmed = "Не подтверждено" },
+    koKR = { deliveryNPC = "제출 대상", deliveryObject = "오브젝트에 제출", deliveryLocation = "제출 장소", deliveryUnconfirmed = "확인되지 않음" },
+    zhCN = { deliveryNPC = "交给", deliveryObject = "在物件交付", deliveryLocation = "交付地点", deliveryUnconfirmed = "尚未确认" },
+    zhTW = { deliveryNPC = "交給", deliveryObject = "在物件交付", deliveryLocation = "交付地點", deliveryUnconfirmed = "尚未確認" },
+}
+deliveryUI.enGB = deliveryUI.enUS
+deliveryUI.esMX = deliveryUI.esES
+for key, value in pairs(deliveryUI[locale] or deliveryUI.enUS) do
     addon.uiText[key] = value
 end
 

@@ -1,12 +1,14 @@
 ## Interface: 16001
 ## Title: Writ Profession
 ## Notes: Identifies Craftsman's Writ professions and filters writs in Auctionator.
-## Version: 0.3.0-alpha
+## Version: 1.0.0
 ## Author: tay-create
 ## OptionalDeps: Auctionator
+## SavedVariables: WritProfessionSettings
 
 Data.lua
 RecipeData.lua
+DeliveryData.lua
 Locales.lua
 Core.lua
 AuctionTab.lua
