@@ -22,7 +22,7 @@ The **Novidades / What's new** button opens release notes and explains why some 
 
 - **Left click** a writ to search that writ in Auctionator **Shopping** and open its native buying screen when an auction is available.
 - **Right click** a writ with an item recipe to search for the recipe using its localized item name when available and open the native buying screen if found.
-- **Search filtered writs** searches the entire filtered list using Auctionator's shopping results and native buying screen.
+- **Checkboxes** allow selecting individual writs or all currently filtered writs. Selections are retained while switching filters. **Search selected** looks up each selected writ, its required crafted item and its item-based recipe (when applicable) together in Auctionator Shopping. Duplicate search terms are removed. Availability depends on current auctions.
 
 On Forever's *Legacy Auction House*, Auctionator's buying screen purchases **one auction stack per click**. You can buy additional stacks using its **Chain buy stacks** option and the Buy Stack button. Auctions can contain multiple units per stack.
 
@@ -39,9 +39,10 @@ Auctionator is an optional dependency. Without it, tooltips still work. The addo
 1. Hover over a Craftsman's Writ, for instance item `264014` (Shadow Protection Potion). Verify that item, skill, recipe, source, reputation and turn-in lines appear on the tooltip. The turn-in location for this example is Kzixx in Duskwood (81.8, 19.8).
 2. Hover over writ `264144` (Gordok Ogre Suit) and check that both Leatherworking and Tailoring appear.
 3. Open **Escrituras** and confirm the **Novidades** popup appears once for this version. Close it and reopen it using the sidebar button. Combine profession, +125 reputation, and skill up to 225 filters. Confirm the filtered list and counts change. Click a writ and check that Shopping opens with results and you can buy through Auctionator.
-4. Right-click a writ whose recipe is sold separately, for example `264038` (Heavy Leather Ball). Confirm that Auctionator searches for the recipe and opens its native purchase screen when an auction is available.
-5. Try **Chain buy stacks** in Auctionator, if you want multiple stacks.
-6. If there is a Lua error, enter `/console scriptErrors 1`, then `/reload`, and capture the complete error message.
+4. Check writs `264014` (Shadow Protection Potion) and `264038` (Heavy Leather Ball), then click **Search selected**. Confirm Shopping searches both writs, their required items and both item-based recipes. Change profession filters and verify that the selections remain checked. The **Select visible** checkbox should only change the currently filtered writs.
+5. Right-click a writ whose recipe is sold separately, for example `264038` (Heavy Leather Ball). Confirm that Auctionator searches for the recipe and opens its native purchase screen when an auction is available.
+6. Try **Chain buy stacks** in Auctionator, if you want multiple stacks.
+7. If there is a Lua error, enter `/console scriptErrors 1`, then `/reload`, and capture the complete error message.
 
 ## Sources and maintenance
 

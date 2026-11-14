@@ -60,8 +60,8 @@ for index = 1, #spellIDs do
 end
 
 local ui = {
-    enUS = { tab = "Writs", header = "Craftsman's Writs", profession = "Profession", all = "All", find = "Filter names", search = "Search filtered writs", hint = "Click a writ to search it in Auctionator.", loading = "Loading item %d...", progress = "%d/%d names loaded", count = "%d writs", empty = "No matching writs" },
-    ptBR = { tab = "Escrituras", header = "Escrituras do Artífice", profession = "Profissão", all = "Todas", find = "Filtrar nomes", search = "Buscar escrituras filtradas", hint = "Clique numa escritura para pesquisá-la no Auctionator.", loading = "Carregando item %d...", progress = "%d/%d nomes carregados", count = "%d escrituras", empty = "Nenhuma escritura encontrada" },
+    enUS = { tab = "Writs", header = "Craftsman's Writs", profession = "Profession", all = "All", find = "Filter names", search = "Search selected writs", hint = "Check the writs you want, then search for their writs, required items and recipes. Click a row to search one writ.", loading = "Loading item %d...", progress = "%d/%d names loaded", count = "%d writs", empty = "No matching writs" },
+    ptBR = { tab = "Escrituras", header = "Escrituras do Artífice", profession = "Profissão", all = "Todas", find = "Filtrar nomes", search = "Pesquisar selecionadas", hint = "Marque as escrituras e clique em Pesquisar para buscar escrituras, itens e receitas. Clique na linha para buscar uma escritura.", loading = "Carregando item %d...", progress = "%d/%d nomes carregados", count = "%d escrituras", empty = "Nenhuma escritura encontrada" },
     esES = { tab = "Encargos", header = "Encargos de artesano", profession = "Profesión", all = "Todas", find = "Filtrar nombres", search = "Buscar encargos filtrados", hint = "Haz clic en un encargo para buscarlo en Auctionator.", loading = "Cargando objeto %d...", progress = "%d/%d nombres cargados", count = "%d encargos", empty = "No hay encargos" },
     frFR = { tab = "Commandes", header = "Commandes d'artisan", profession = "Métier", all = "Tous", find = "Filtrer les noms", search = "Chercher les commandes", hint = "Cliquez sur une commande pour la rechercher dans Auctionator.", loading = "Chargement de l'objet %d...", progress = "%d/%d noms chargés", count = "%d commandes", empty = "Aucune commande" },
     deDE = { tab = "Aufträge", header = "Handwerkeraufträge", profession = "Beruf", all = "Alle", find = "Namen filtern", search = "Aufträge suchen", hint = "Auftrag anklicken, um ihn in Auctionator zu suchen.", loading = "Lade Gegenstand %d...", progress = "%d/%d Namen geladen", count = "%d Aufträge", empty = "Keine Aufträge gefunden" },
@@ -78,24 +78,26 @@ ui.esMX = ui.esES
 local filterUI = {
     enUS = {
         reputationFilter = "Reputation", skillFilter = "Crafting skill", skillUpTo = "Up to %d",
+        selectVisible = "Select visible", selectedCount = "%d selected", searchSelected = "Search selected (%d)",
         newsButton = "What's new", newsTitle = "Writ Profession update", newsClose = "Got it!",
         newsIntro = "Hello! Writ Profession now has its own icon in the in-game AddOns list. Your profession, reputation, crafting skill, and name filters are all ready to use as before.",
         newsDetails = "We're also working on the delivery locations. So far, we've tracked down where to turn in 107 of the 150 writs. The other 43 still need confirmation. Some writs share the same NPC, and information about WoW Forever isn't always complete. That's why some entries say 'Not confirmed' for now. We'd rather be upfront than send you to the wrong place. If you discover one of the missing locations, please share it with us. Every bit of help makes the addon better. Thanks for being here!",
     },
     ptBR = {
         reputationFilter = "Reputação", skillFilter = "Habilidade da profissão", skillUpTo = "Até %d",
+        selectVisible = "Selecionar visíveis", selectedCount = "%d selecionadas", searchSelected = "Pesquisar (%d)",
         newsButton = "Novidades", newsTitle = "Novidades do Writ Profession", newsClose = "Entendi!",
         newsIntro = "Oi! O Writ Profession agora tem seu próprio ícone na lista de addons do jogo. Os filtros de profissão, reputação, habilidade e nome continuam disponíveis para ajudar você a encontrar suas escrituras.",
         newsDetails = "Também seguimos procurando os locais de entrega. Já encontramos o destino de 107 das 150 escrituras, mas ainda faltam 43 para confirmar. Algumas são entregues ao mesmo NPC e nem sempre as informações disponíveis sobre o WoW Forever mostram todos os detalhes. Por isso, em algumas delas você vai encontrar 'Ainda não confirmado'. Preferimos ser sinceros a mandar você para o lugar errado. Se descobrir algum local que está faltando, conte pra gente! Cada ajuda faz diferença. Obrigado por acompanhar o projeto!",
     },
-    esES = { reputationFilter = "Reputación", skillFilter = "Habilidad profesional", skillUpTo = "Hasta %d", newsButton = "Novedades", newsTitle = "Actualización de Writ Profession", newsClose = "Entendido" },
-    frFR = { reputationFilter = "Réputation", skillFilter = "Compétence", skillUpTo = "Jusqu'à %d", newsButton = "Nouveautés", newsTitle = "Mise à jour Writ Profession", newsClose = "Compris" },
-    deDE = { reputationFilter = "Ruf", skillFilter = "Berufsfertigkeit", skillUpTo = "Bis %d", newsButton = "Neuigkeiten", newsTitle = "Writ Profession Update", newsClose = "Verstanden" },
-    itIT = { reputationFilter = "Reputazione", skillFilter = "Abilità professionale", skillUpTo = "Fino a %d", newsButton = "Novità", newsTitle = "Aggiornamento Writ Profession", newsClose = "Capito" },
-    ruRU = { reputationFilter = "Репутация", skillFilter = "Навык профессии", skillUpTo = "До %d", newsButton = "Что нового", newsTitle = "Обновление Writ Profession", newsClose = "Понятно" },
-    koKR = { reputationFilter = "평판", skillFilter = "전문 기술 숙련도", skillUpTo = "%d 이하", newsButton = "새 소식", newsTitle = "Writ Profession 업데이트", newsClose = "확인" },
-    zhCN = { reputationFilter = "声望", skillFilter = "专业技能", skillUpTo = "不高于%d", newsButton = "更新内容", newsTitle = "Writ Profession 更新", newsClose = "知道了" },
-    zhTW = { reputationFilter = "聲望", skillFilter = "專業技能", skillUpTo = "不高於%d", newsButton = "更新內容", newsTitle = "Writ Profession 更新", newsClose = "知道了" },
+    esES = { reputationFilter = "Reputación", skillFilter = "Habilidad profesional", skillUpTo = "Hasta %d", selectVisible = "Seleccionar visibles", selectedCount = "%d seleccionados", searchSelected = "Buscar (%d)", newsButton = "Novedades", newsTitle = "Actualización de Writ Profession", newsClose = "Entendido" },
+    frFR = { reputationFilter = "Réputation", skillFilter = "Compétence", skillUpTo = "Jusqu'à %d", selectVisible = "Tout sélectionner (visible)", selectedCount = "%d sélectionnées", searchSelected = "Rechercher (%d)", newsButton = "Nouveautés", newsTitle = "Mise à jour Writ Profession", newsClose = "Compris" },
+    deDE = { reputationFilter = "Ruf", skillFilter = "Berufsfertigkeit", skillUpTo = "Bis %d", selectVisible = "Sichtbare auswählen", selectedCount = "%d ausgewählt", searchSelected = "Suchen (%d)", newsButton = "Neuigkeiten", newsTitle = "Writ Profession Update", newsClose = "Verstanden" },
+    itIT = { reputationFilter = "Reputazione", skillFilter = "Abilità professionale", skillUpTo = "Fino a %d", selectVisible = "Seleziona visibili", selectedCount = "%d selezionati", searchSelected = "Cerca (%d)", newsButton = "Novità", newsTitle = "Aggiornamento Writ Profession", newsClose = "Capito" },
+    ruRU = { reputationFilter = "Репутация", skillFilter = "Навык профессии", skillUpTo = "До %d", selectVisible = "Выбрать видимые", selectedCount = "%d выбрано", searchSelected = "Поиск (%d)", newsButton = "Что нового", newsTitle = "Обновление Writ Profession", newsClose = "Понятно" },
+    koKR = { reputationFilter = "평판", skillFilter = "전문 기술 숙련도", skillUpTo = "%d 이하", selectVisible = "표시된 항목 선택", selectedCount = "%d개 선택됨", searchSelected = "검색 (%d)", newsButton = "새 소식", newsTitle = "Writ Profession 업데이트", newsClose = "확인" },
+    zhCN = { reputationFilter = "声望", skillFilter = "专业技能", skillUpTo = "不高于%d", selectVisible = "选择可见项", selectedCount = "已选择 %d 项", searchSelected = "搜索 (%d)", newsButton = "更新内容", newsTitle = "Writ Profession 更新", newsClose = "知道了" },
+    zhTW = { reputationFilter = "聲望", skillFilter = "專業技能", skillUpTo = "不高於%d", selectVisible = "選取可見項", selectedCount = "已選取 %d 項", searchSelected = "搜尋 (%d)", newsButton = "更新內容", newsTitle = "Writ Profession 更新", newsClose = "知道了" },
 }
 filterUI.enGB = filterUI.enUS
 filterUI.esMX = filterUI.esES

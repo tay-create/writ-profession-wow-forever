@@ -139,7 +139,19 @@ local function createRow(parent)
     row.border:SetColorTexture(0.56, 0.39, 0.16, 0.30)
     row.icon = row:CreateTexture(nil, "ARTWORK")
     row.icon:SetSize(24, 24)
-    row.icon:SetPoint("LEFT", row, "LEFT", 8, 0)
+    row.icon:SetPoint("LEFT", row, "LEFT", 34, 0)
+    row.checkbox = CreateFrame("CheckButton", nil, row, "UICheckButtonTemplate")
+    row.checkbox:SetSize(24, 24)
+    row.checkbox:SetPoint("LEFT", row, "LEFT", 5, 0)
+    row.checkbox:SetScript("OnClick", function(checkbox)
+        local frame = parent:GetParent():GetParent()
+        local checked = checkbox:GetChecked()
+        frame.selectedIDs[row.itemID] = checked and true or nil
+        if checked then
+            frame:RequestRelatedItemNames(row.itemID)
+        end
+        frame:UpdateSelectionState()
+    end)
     row.iconBorder = row:CreateTexture(nil, "OVERLAY")
     row.iconBorder:SetTexture("Interface\\Buttons\\UI-Quickslot2")
     row.iconBorder:SetSize(33, 33)
@@ -200,6 +212,7 @@ function WritProfessionAuctionTabMixin:OnLoad()
     self.reputationFilter = 0
     self.skillFilter = 0
     self.sortedIDs = {}
+    self.selectedIDs = {}
     self.rows = {}
     self.professionButtons = {}
     self.requested = {}
@@ -316,7 +329,7 @@ function WritProfessionAuctionTabMixin:OnLoad()
     self.skillDropdown:SetPoint("TOPLEFT", self, "TOPLEFT", 376, -86)
 
     self.list = CreateFrame("ScrollFrame", nil, self, "UIPanelScrollFrameTemplate")
-    self.list:SetPoint("TOPLEFT", self, "TOPLEFT", 213, -141)
+    self.list:SetPoint("TOPLEFT", self, "TOPLEFT", 213, -164)
     self.list:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -33, 68)
     self.listContent = CreateFrame("Frame", nil, self.list)
     self.listContent:SetSize(500, 1)
@@ -325,6 +338,23 @@ function WritProfessionAuctionTabMixin:OnLoad()
         self.listContent:SetWidth(math.max(1, scroll:GetWidth()))
     end)
 
+    self.selectVisible = CreateFrame("CheckButton", nil, self, "UICheckButtonTemplate")
+    self.selectVisible:SetSize(22, 22)
+    self.selectVisible:SetPoint("TOPLEFT", self, "TOPLEFT", 214, -134)
+    self.selectVisible:SetScript("OnClick", function(checkbox)
+        local checked = checkbox:GetChecked()
+        for _, itemID in ipairs(self.filteredIDs) do
+            self.selectedIDs[itemID] = checked and true or nil
+            if checked then
+                self:RequestRelatedItemNames(itemID)
+            end
+        end
+        self:UpdateSelectionState()
+    end)
+    local selectVisibleLabel = createText(self.mainPanel, "GameFontHighlightSmall", ui.selectVisible,
+        "TOPLEFT", "TOPLEFT", 42, -129)
+    setReadableText(selectVisibleLabel, 0.90, 0.84, 0.71)
+
     self.count = createText(self.mainPanel, "GameFontHighlightSmall", "", "BOTTOMLEFT", "BOTTOMLEFT", 14, 12)
     setReadableText(self.count, 0.90, 0.84, 0.71)
     self.progress = createText(self.mainPanel, "GameFontHighlightSmall", "", "BOTTOMLEFT", "BOTTOMLEFT", 14, 29)
@@ -332,9 +362,8 @@ function WritProfessionAuctionTabMixin:OnLoad()
     self.searchButton = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
     self.searchButton:SetSize(205, 29)
     self.searchButton:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -19, 16)
-    self.searchButton:SetText(ui.search)
     self.searchButton:SetScript("OnClick", function()
-        self:SearchItems(self.filteredIDs)
+        self:SearchSelected()
     end)
 
     self.empty = createText(self.listContent, "GameFontHighlight", ui.empty, "TOPLEFT", "TOPLEFT", 12, -17)
@@ -494,9 +523,84 @@ function WritProfessionAuctionTabMixin:UpdateItems(keepScroll)
     self.empty:SetShown(#filtered == 0)
     self.listContent:SetHeight(math.max(1, #filtered * rowHeight))
     self.list:SetVerticalScroll(oldScroll)
-    self.count:SetText(ui.count:format(#filtered))
     self.progress:SetText(ui.progress:format(loaded, #filtered))
-    self.searchButton:SetEnabled(#filtered > 0 and loaded == #filtered)
+    self:UpdateSelectionState()
+end
+
+function WritProfessionAuctionTabMixin:RequestRelatedItemNames(itemID)
+    local recipe = addon.recipeData[itemID]
+    if not recipe or not C_Item or not C_Item.RequestLoadItemDataByID then
+        return
+    end
+    if recipe.itemID then
+        C_Item.RequestLoadItemDataByID(recipe.itemID)
+    end
+    if recipe.learnMode == "item" and recipe.recipeItemID then
+        C_Item.RequestLoadItemDataByID(recipe.recipeItemID)
+    end
+end
+
+function WritProfessionAuctionTabMixin:UpdateSelectionState()
+    local selectedCount = 0
+    local namesReady = true
+    for _, itemID in ipairs(self.sortedIDs) do
+        if self.selectedIDs[itemID] then
+            selectedCount = selectedCount + 1
+            if not getItemName(itemID) then
+                namesReady = false
+            end
+        end
+    end
+
+    local visibleSelected = 0
+    for _, itemID in ipairs(self.filteredIDs) do
+        if self.selectedIDs[itemID] then
+            visibleSelected = visibleSelected + 1
+        end
+    end
+    for _, row in ipairs(self.rows) do
+        if row:IsShown() then
+            row.checkbox:SetChecked(self.selectedIDs[row.itemID] or false)
+        end
+    end
+
+    self.selectVisible:SetEnabled(#self.filteredIDs > 0)
+    self.selectVisible:SetChecked(#self.filteredIDs > 0 and visibleSelected == #self.filteredIDs)
+    self.count:SetText(ui.count:format(#self.filteredIDs) .. "  |  " .. ui.selectedCount:format(selectedCount))
+    self.searchButton:SetText(ui.searchSelected:format(selectedCount))
+    self.searchButton:SetEnabled(selectedCount > 0 and namesReady)
+end
+
+function WritProfessionAuctionTabMixin:SearchSelected()
+    local terms = {}
+    local seen = {}
+    local function addTerm(name)
+        if name and name ~= "" and not seen[name:lower()] then
+            seen[name:lower()] = true
+            table.insert(terms, name)
+        end
+    end
+
+    for _, itemID in ipairs(self.sortedIDs) do
+        if self.selectedIDs[itemID] then
+            local writName = getItemName(itemID)
+            if not writName then
+                return
+            end
+            addTerm(writName)
+
+            local recipe = addon.recipeData[itemID]
+            if recipe then
+                addTerm((recipe.itemID and getItemName(recipe.itemID)) or recipe.name)
+                if recipe.learnMode == "item" then
+                    addTerm((recipe.recipeItemID and getItemName(recipe.recipeItemID)) or recipe.recipeName)
+                end
+            end
+        end
+    end
+
+    self.pendingRecipeItemID = nil
+    self:SearchTerms(terms, 1)
 end
 
 function WritProfessionAuctionTabMixin:SearchRecipe(itemID)
