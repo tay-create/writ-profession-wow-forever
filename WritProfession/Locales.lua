@@ -79,13 +79,13 @@ local filterUI = {
     enUS = {
         reputationFilter = "Reputation", skillFilter = "Crafting skill", skillUpTo = "Up to %d",
         newsButton = "What's new", newsTitle = "Writ Profession update", newsClose = "Got it!",
-        newsIntro = "Hello! We've refreshed the Writs tab and added reputation and crafting skill filters. You can combine them with profession and name searches to find what you need more easily.",
+        newsIntro = "Hello! Writ Profession now has its own icon in the in-game AddOns list. Your profession, reputation, crafting skill, and name filters are all ready to use as before.",
         newsDetails = "We're also working on the delivery locations. So far, we've tracked down where to turn in 107 of the 150 writs. The other 43 still need confirmation. Some writs share the same NPC, and information about WoW Forever isn't always complete. That's why some entries say 'Not confirmed' for now. We'd rather be upfront than send you to the wrong place. If you discover one of the missing locations, please share it with us. Every bit of help makes the addon better. Thanks for being here!",
     },
     ptBR = {
         reputationFilter = "Reputação", skillFilter = "Habilidade da profissão", skillUpTo = "Até %d",
         newsButton = "Novidades", newsTitle = "Novidades do Writ Profession", newsClose = "Entendi!",
-        newsIntro = "Oi! A aba de Escrituras ganhou um visual renovado e dois filtros novos: reputação e habilidade da profissão. Você pode combinar tudo com a profissão escolhida e a busca por nome para encontrar suas escrituras com mais facilidade.",
+        newsIntro = "Oi! O Writ Profession agora tem seu próprio ícone na lista de addons do jogo. Os filtros de profissão, reputação, habilidade e nome continuam disponíveis para ajudar você a encontrar suas escrituras.",
         newsDetails = "Também seguimos procurando os locais de entrega. Já encontramos o destino de 107 das 150 escrituras, mas ainda faltam 43 para confirmar. Algumas são entregues ao mesmo NPC e nem sempre as informações disponíveis sobre o WoW Forever mostram todos os detalhes. Por isso, em algumas delas você vai encontrar 'Ainda não confirmado'. Preferimos ser sinceros a mandar você para o lugar errado. Se descobrir algum local que está faltando, conte pra gente! Cada ajuda faz diferença. Obrigado por acompanhar o projeto!",
     },
     esES = { reputationFilter = "Reputación", skillFilter = "Habilidad profesional", skillUpTo = "Hasta %d", newsButton = "Novedades", newsTitle = "Actualización de Writ Profession", newsClose = "Entendido" },

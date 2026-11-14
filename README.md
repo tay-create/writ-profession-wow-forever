@@ -4,7 +4,7 @@ World of Warcraft: Forever addon that identifies the profession, required crafte
 
 ## Current version
 
-**1.0.0 Release** for Forever 1.60.1, interface **16001**. The data includes **150** writ IDs across Alchemy, Blacksmithing, Engineering, Leatherworking and Tailoring. Two writs belong to two professions.
+**1.0.1 Release** for Forever 1.60.1, interface **16001**. The data includes **150** writ IDs across Alchemy, Blacksmithing, Engineering, Leatherworking and Tailoring. Two writs belong to two professions. The AddOns list displays the addon's own icon.
 
 The writ tooltip shows the required item, recipe, crafting skill and broad recipe acquisition method (trainer, vendor, world loot, quest, dungeon or crafted recipe). Verified NPC names are displayed where available. Many recipe sources do not have an individually verified NPC or drop location and are described by source type, with unknown origins marked clearly. Some skills show the yellow-skill threshold as an estimate, rather than the minimum required skill.
 

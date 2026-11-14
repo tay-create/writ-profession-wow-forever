@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 - 2026-11-14
+
+- Adds the Writ Profession icon to the in-game AddOns list by declaring `IconTexture` and bundling a WoW-compatible TGA image.
+
 ## 1.0.0 - 2026-11-13
 
 - First stable release for WoW Forever 1.60.1, following in-game validation by the author.
