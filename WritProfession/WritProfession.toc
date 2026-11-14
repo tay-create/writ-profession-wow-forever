@@ -1,7 +1,7 @@
 ## Interface: 16001
 ## Title: Writ Profession
 ## Notes: Identifies Craftsman's Writ professions and filters writs in Auctionator.
-## Version: 1.0.1
+## Version: 1.0.2
 ## Author: tay-create
 ## IconTexture: Interface\AddOns\WritProfession\Icon
 ## OptionalDeps: Auctionator

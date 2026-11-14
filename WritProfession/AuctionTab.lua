@@ -115,12 +115,12 @@ end
 
 local function getAddonVersion()
     if C_AddOns and C_AddOns.GetAddOnMetadata then
-        return C_AddOns.GetAddOnMetadata("WritProfession", "Version") or "1.0.1"
+        return C_AddOns.GetAddOnMetadata("WritProfession", "Version") or "1.0.2"
     end
     if GetAddOnMetadata then
-        return GetAddOnMetadata("WritProfession", "Version") or "1.0.1"
+        return GetAddOnMetadata("WritProfession", "Version") or "1.0.2"
     end
-    return "1.0.1"
+    return "1.0.2"
 end
 
 local function createRow(parent)

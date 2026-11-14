@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2 - 2026-11-14
+
+- Adds checkboxes to choose individual writs or all writs visible under the current filters, preserving selections across filters.
+- Searches selected writs together with their required crafted items and purchasable recipe items through Auctionator Shopping, removing duplicate terms.
+- Updates the What's New notice to explain the new search workflow.
+
 ## 1.0.1 - 2026-11-14
 
 - Adds the Writ Profession icon to the in-game AddOns list by declaring `IconTexture` and bundling a WoW-compatible TGA image.
