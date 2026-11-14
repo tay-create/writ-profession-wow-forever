@@ -1,0 +1,89 @@
+name: Publish to CurseForge
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag to publish (for example, v1.0.2)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: curseforge-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+
+    steps:
+      - name: Check out release tooling
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Check out the selected addon version
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+          path: addon-source
+          persist-credentials: false
+
+      - name: Fetch CurseForge game versions
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+        run: |
+          if [[ -z "$CURSEFORGE_API_TOKEN" ]]; then
+            echo 'Set the CURSEFORGE_API_TOKEN repository secret before publishing.' >&2
+            exit 1
+          fi
+
+          mkdir -p release
+          curl --fail-with-body --silent --show-error \
+            -H "X-Api-Token: $CURSEFORGE_API_TOKEN" \
+            -o release/game-versions.json \
+            'https://wow.curseforge.com/api/game/versions'
+
+      - name: Build addon ZIP and upload metadata
+        shell: bash
+        run: |
+          python3 .github/scripts/prepare_curseforge.py "$RELEASE_TAG" \
+            --source-root addon-source \
+            --game-versions-file release/game-versions.json \
+            --output-dir release
+
+      - name: Upload release to CurseForge
+        shell: bash
+        env:
+          CURSEFORGE_API_TOKEN: ${{ secrets.CURSEFORGE_API_TOKEN }}
+        run: |
+          version="${RELEASE_TAG#v}"
+          response_file="$(mktemp)"
+
+          curl --fail-with-body --silent --show-error \
+            -H "X-Api-Token: $CURSEFORGE_API_TOKEN" \
+            -F 'metadata=<release/metadata.json;type=application/json' \
+            -F "file=@release/WritProfession-${version}.zip;type=application/zip" \
+            -o "$response_file" \
+            'https://wow.curseforge.com/api/projects/1803585/upload-file'
+
+          python3 - "$response_file" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          response = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+          if not isinstance(response.get('id'), int):
+              raise SystemExit('CurseForge did not return a valid file ID.')
+          print(f"CurseForge upload accepted. File ID: {response['id']}")
+          PY
