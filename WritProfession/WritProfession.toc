@@ -1,7 +1,7 @@
 ## Interface: 16001
 ## Title: Writ Profession
-## Notes: Identifies Craftsman's Writ professions and filters writs in Auctionator.
-## Version: 1.0.2
+## Notes: Tracks Craftsman's Writs and Waylaid Crate rewards in Auctionator.
+## Version: 1.1.3
 ## Author: tay-create
 ## IconTexture: Interface\AddOns\WritProfession\Icon
 ## OptionalDeps: Auctionator
@@ -10,6 +10,7 @@
 Data.lua
 RecipeData.lua
 DeliveryData.lua
+CrateData.lua
 Locales.lua
 Core.lua
 AuctionTab.lua

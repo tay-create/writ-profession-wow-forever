@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.1.3 - 2026-11-16
+
+- Adds individual crate checkboxes. Searching selected entries now includes each selected crate and all materials needed to fill it, with duplicate search terms removed.
+- Keeps profession filters visible but disabled while writs are hidden, and shows automatic update notes only once per addon version.
+- Refreshes the selected-search button as crate material names finish loading.
+
+## 1.1.2 - 2026-11-16
+
+- Replaces broad north/central/south writ filters with the individual delivery zones for the selected continent.
+
+## 1.1.1 - 2026-11-16
+
+- Adds the reported Expert rewards and Artisan Favor values. Artisan silver is estimated at 10s/20s and marked with `~` until confirmed in-game.
+- Keeps known Favor visible in crate tooltips when the silver reward is still unknown.
+
+## 1.1.0 - 2026-11-16
+
+- Adds a separate Auctionator tab for 30 Waylaid Crates, with filters for seven material categories, four tiers and item names.
+- Shows Merchant's Favor and silver rewards for Apprentice and Journeyman crates. Expert and Artisan payouts remain marked as awaiting confirmation.
+- Adds crate reward details to item tooltips and lets a crate row launch its Auctionator Shopping search.
+- Adds Portuguese and English crate labels, with English fallback for the other supported client locales.
+
 ## 1.0.2 - 2026-11-14
 
 - Adds checkboxes to choose individual writs or all writs visible under the current filters, preserving selections across filters.

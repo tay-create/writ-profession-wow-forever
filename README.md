@@ -1,10 +1,10 @@
 # Writ Profession
 
-World of Warcraft: Forever addon that identifies the profession, required crafted item, crafting skill, recipe and reputation associated with each **Craftsman's Writ**. With Auctionator enabled, it adds an **Escrituras / Writs** tab inside the Auction House.
+World of Warcraft: Forever addon that identifies the profession, required crafted item, crafting skill, recipe and reputation associated with each **Craftsman's Writ**. It also catalogues **30 Waylaid Crates**. With Auctionator enabled, it adds separate **Escrituras / Writs** and **Caixotes / Crates** tabs inside the Auction House.
 
 ## Current version
 
-**1.0.2 Release** for Forever 1.60.1, interface **16001**. The data includes **150** writ IDs across Alchemy, Blacksmithing, Engineering, Leatherworking and Tailoring. Two writs belong to two professions. The AddOns list displays the addon's own icon.
+**1.1.3 Build** for Forever 1.60.1, interface **16001**. The data includes **150** writ IDs across Alchemy, Blacksmithing, Engineering, Leatherworking and Tailoring, plus **30** Waylaid Crate IDs across seven material categories and four tiers. Two writs belong to two professions. The AddOns list displays the addon's own icon.
 
 The writ tooltip shows the required item, recipe, crafting skill and broad recipe acquisition method (trainer, vendor, world loot, quest, dungeon or crafted recipe). Verified NPC names are displayed where available. Many recipe sources do not have an individually verified NPC or drop location and are described by source type, with unknown origins marked clearly. Some skills show the yellow-skill threshold as an estimate, rather than the minimum required skill.
 
@@ -14,7 +14,7 @@ The addon follows the game client language for labels and profession names. **99
 
 ## Auctionator integration
 
-Open the auction house and select the **Escrituras / Writs** tab. Combine filters for profession, writ name, reputation reward (+75, +125 or +200), and crafting skill (up to 75, 150, 225 or 300). The skill filter uses the recipe's stored skill value. Some recipe skill values are estimated yellow-skill thresholds, as marked in their tooltips.
+Open the auction house and select the **Escrituras / Writs** tab. Combine filters for profession, writ name, reputation reward (+75, +125 or +200), crafting skill (up to 75, 150, 225 or 300), continent and delivery zone. The zone list appears after selecting Kalimdor or Eastern Kingdoms and contains the named areas with known writ destinations. The skill filter uses the recipe's stored skill value. Some recipe skill values are estimated yellow-skill thresholds, as marked in their tooltips.
 
 The tab uses a classic WoW-style dark leather and gold layout, with profession icons and a highlighted active filter. Writ rows show the item icon, crafting skill (a `~` marks estimates) and reputation reward, with the number of visible writs and name-loading progress below the list.
 
@@ -27,6 +27,12 @@ The **Novidades / What's new** button opens release notes and explains why some 
 On Forever's *Legacy Auction House*, Auctionator's buying screen purchases **one auction stack per click**. You can buy additional stacks using its **Chain buy stacks** option and the Buy Stack button. Auctions can contain multiple units per stack.
 
 Auctionator is an optional dependency. Without it, tooltips still work. The addon saves only the last version of the update notice you've seen in `WritProfessionSettings`.
+
+## Waylaid Crates
+
+Open the **Caixotes / Crates** tab to browse the 30 Waylaid Crates. Filter by material category (**Herbs, Ore, Textiles, Curiosities, Fabrics, Ingots** or **Parts**), tier (**Apprentice, Journeyman, Expert** or **Artisan**) and item name. The list shows Merchant's Favor and silver earned from each filled crate. Click a row to search that crate in Auctionator Shopping. Hover over it to inspect its accepted materials and reward.
+
+Confirmed payouts are **5 Favor + 2s 50c** for Apprentice white crates, **10 Favor + 5s** for Apprentice green, **10 Favor + 5s** for Journeyman white, **20 Favor + 10s** for Journeyman green, **15 Favor + 7s 50c** for Expert white and **30 Favor + 15s** for Expert green. Artisan crates give **20 Favor** when white and **40 Favor** when green. Their silver rewards are estimated at **10s** and **20s** respectively, and the addon marks these values with `~` until they are confirmed in-game.
 
 ## Installation
 
@@ -43,9 +49,11 @@ Auctionator is an optional dependency. Without it, tooltips still work. The addo
 5. Right-click a writ whose recipe is sold separately, for example `264038` (Heavy Leather Ball). Confirm that Auctionator searches for the recipe and opens its native purchase screen when an auction is available.
 6. Try **Chain buy stacks** in Auctionator, if you want multiple stacks.
 7. If there is a Lua error, enter `/console scriptErrors 1`, then `/reload`, and capture the complete error message.
+8. Open **Caixotes** and verify that all 30 crates appear. Select each category and tier filter and confirm that the list and count update together. Search for `Apprentice Herbs` and click its row to check that Auctionator Shopping searches the crate.
+9. Verify the visible rewards for Apprentice, Journeyman and Expert crates. Artisan entries should show **20/40 Favor** and estimated **~10s/~20s** in the silver column.
 
 ## Sources and maintenance
 
-The writ mapping and required recipe/skill data were checked against [The Forever Era: Merchant's Favor](https://theforeverera.com/en/merchants-favor/) for client build 1.60.1.70888. The recipe item IDs and broad item-source categories were cross-referenced with the [Classic Era item cache](https://github.com/Napalmsteak/WoW-Classic-Item-Caches). Vendor and drop locations may differ in Forever. Skill estimates are explicitly marked.
+The writ mapping and required recipe/skill data were checked against [The Forever Era: Merchant's Favor](https://theforeverera.com/en/merchants-favor/) for client build 1.60.1.70888. Crate categories, tiers, materials and Apprentice/Journeyman payouts were checked against the [60.tools Merchant's Favor guide](https://www.60.tools/guides/merchants-favor). Expert payouts follow live turn-in reports summarized by [Conquest Capped](https://conquestcapped.com/guides/wow-forever/wow-forever-merchants-favor/) and the [Waylaid Auction Helper changelog](https://www.curseforge.com/wow/addons/waylaid-auction-helper/files/9598817). The latest Waylaid Auction Helper reports Artisan Favor as 20/40 and estimates its silver payouts at 10s/20s until a turn-in confirms them. The 60.tools page predates these newer payout reports. The recipe item IDs and broad item-source categories were cross-referenced with the [Classic Era item cache](https://github.com/Napalmsteak/WoW-Classic-Item-Caches). Vendor and drop locations may differ in Forever. Skill estimates are explicitly marked.
 
-The addon's source files are `Data.lua`, `RecipeData.lua`, `DeliveryData.lua`, `Locales.lua`, `Core.lua`, and `AuctionTab.lua`, loaded through `WritProfession.toc`. Turn-in information comes from [Forever XP quest pages](https://forever-xp.com/). The author completed in-game checks for the 1.0.0 release, including the Auction House integration.
+The addon's source files are `Data.lua`, `RecipeData.lua`, `DeliveryData.lua`, `CrateData.lua`, `Locales.lua`, `Core.lua`, `AuctionTab.lua` and `CrateTab.lua`, with their XML templates loaded through `WritProfession.toc`. Turn-in information comes from [Forever XP quest pages](https://forever-xp.com/). The author completed in-game checks for the 1.0.0 release, including the Auction House integration.

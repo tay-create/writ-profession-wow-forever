@@ -40,50 +40,67 @@ local function showProfession(tooltip, itemID)
     end
 
     local professions = addon.writs[itemID]
-    if not professions then
-        return
+    if professions then
+        local names = {}
+        for index = 1, #professions do
+            names[index] = addon.professionNames[professions[index]]
+        end
+
+        tooltip:AddLine("|cff33ff99" .. addon.professionLabel .. ": " .. table.concat(names, " / ") .. "|r")
+        local reputation = addon.GetWritReputation(itemID)
+        if reputation then
+            tooltip:AddLine("|cff66ccff" .. addon.reputationLabel .. ": +" .. reputation .. "|r")
+        end
+
+        local recipe = addon.recipeData[itemID]
+        if recipe then
+            local ui = addon.uiText
+            tooltip:AddLine(" ")
+            tooltip:AddLine("|cffffd466" .. ui.craftedItem .. ":|r " .. getCraftedItemName(recipe), 1, 1, 1)
+            local skill = tostring(recipe.skill)
+            if recipe.skillApproximate then
+                skill = ui.skillApproximate:format(skill)
+            end
+            tooltip:AddLine("|cffffd466" .. ui.recipeSkill .. ":|r " .. skill, 1, 1, 1)
+
+            if recipe.learnMode == "trainer" then
+                tooltip:AddLine("|cffffd466" .. ui.recipe .. ":|r " .. ui.trainer, 1, 1, 1)
+                tooltip:AddLine("|cffffd466" .. ui.recipeSource .. ":|r " .. ui.trainerSource, 1, 1, 1)
+            else
+                local recipeName = recipe.recipeItemID and GetItemInfo(recipe.recipeItemID)
+                if not recipeName and recipe.recipeItemID and C_Item and C_Item.GetItemNameByID then
+                    recipeName = C_Item.GetItemNameByID(recipe.recipeItemID)
+                end
+                if not recipeName and recipe.recipeItemID and C_Item and C_Item.RequestLoadItemDataByID then
+                    C_Item.RequestLoadItemDataByID(recipe.recipeItemID)
+                end
+                tooltip:AddLine("|cffffd466" .. ui.recipe .. ":|r " .. (recipeName or recipe.recipeName), 1, 1, 1)
+                tooltip:AddLine("|cffffd466" .. ui.recipeSource .. ":|r " ..
+                    getRecipeSource(recipe), 1, 1, 1)
+            end
+        end
     end
 
-    local names = {}
-    for index = 1, #professions do
-        names[index] = addon.professionNames[professions[index]]
-    end
-
-    tooltip:AddLine("|cff33ff99" .. addon.professionLabel .. ": " .. table.concat(names, " / ") .. "|r")
-    local reputation = addon.GetWritReputation(itemID)
-    if reputation then
-        tooltip:AddLine("|cff66ccff" .. addon.reputationLabel .. ": +" .. reputation .. "|r")
-    end
-
-    local recipe = addon.recipeData[itemID]
-    if recipe then
+    local crate = addon.cratesByID and addon.cratesByID[itemID]
+    if crate then
         local ui = addon.uiText
-        tooltip:AddLine(" ")
-        tooltip:AddLine("|cffffd466" .. ui.craftedItem .. ":|r " .. getCraftedItemName(recipe), 1, 1, 1)
-        local skill = tostring(recipe.skill)
-        if recipe.skillApproximate then
-            skill = ui.skillApproximate:format(skill)
-        end
-        tooltip:AddLine("|cffffd466" .. ui.recipeSkill .. ":|r " .. skill, 1, 1, 1)
-
-        if recipe.learnMode == "trainer" then
-            tooltip:AddLine("|cffffd466" .. ui.recipe .. ":|r " .. ui.trainer, 1, 1, 1)
-            tooltip:AddLine("|cffffd466" .. ui.recipeSource .. ":|r " .. ui.trainerSource, 1, 1, 1)
-        else
-            local recipeName = recipe.recipeItemID and GetItemInfo(recipe.recipeItemID)
-            if not recipeName and recipe.recipeItemID and C_Item and C_Item.GetItemNameByID then
-                recipeName = C_Item.GetItemNameByID(recipe.recipeItemID)
+        local moneyReward = crate.moneyCopper and GetCoinTextureString and GetCoinTextureString(crate.moneyCopper)
+        if crate.favor or moneyReward then
+            tooltip:AddLine(" ")
+            tooltip:AddLine("|cffffd466" .. ui.crateReward .. ":|r")
+            if crate.favor then
+                tooltip:AddLine(ui.crateFavorShort .. ": " .. crate.favor, 1, 1, 1)
             end
-            if not recipeName and recipe.recipeItemID and C_Item and C_Item.RequestLoadItemDataByID then
-                C_Item.RequestLoadItemDataByID(recipe.recipeItemID)
+            if moneyReward then
+                if crate.moneyEstimated then
+                    moneyReward = "~" .. moneyReward .. " (" .. ui.crateEstimated .. ")"
+                end
+                tooltip:AddLine(ui.crateMoneyColumn .. ": " .. moneyReward, 1, 1, 1)
             end
-            tooltip:AddLine("|cffffd466" .. ui.recipe .. ":|r " .. (recipeName or recipe.recipeName), 1, 1, 1)
-            tooltip:AddLine("|cffffd466" .. ui.recipeSource .. ":|r " ..
-                getRecipeSource(recipe), 1, 1, 1)
         end
     end
 
-    local delivery = addon.deliveryData[itemID]
+    local delivery = not crate and addon.deliveryData[itemID]
     if delivery then
         local ui = addon.uiText
         tooltip:AddLine(" ")

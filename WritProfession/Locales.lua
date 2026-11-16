@@ -60,8 +60,8 @@ for index = 1, #spellIDs do
 end
 
 local ui = {
-    enUS = { tab = "Writs", header = "Craftsman's Writs", profession = "Profession", all = "All", find = "Filter names", search = "Search selected writs", hint = "Check the writs you want, then search for their writs, required items and recipes. Click a row to search one writ.", loading = "Loading item %d...", progress = "%d/%d names loaded", count = "%d writs", empty = "No matching writs" },
-    ptBR = { tab = "Escrituras", header = "Escrituras do Artífice", profession = "Profissão", all = "Todas", find = "Filtrar nomes", search = "Pesquisar selecionadas", hint = "Marque as escrituras e clique em Pesquisar para buscar escrituras, itens e receitas. Clique na linha para buscar uma escritura.", loading = "Carregando item %d...", progress = "%d/%d nomes carregados", count = "%d escrituras", empty = "Nenhuma escritura encontrada" },
+    enUS = { tab = "Writ Prof", header = "Writ Profession", profession = "Profession", all = "All", find = "Filter names", search = "Search selected writs", hint = "Check the writs you want, then search for their writs, required items and recipes. Click a row to search one writ.", loading = "Loading item %d...", progress = "%d/%d names loaded", count = "%d writs", empty = "No matching writs", cratesTab = "Crates", cratesHeader = "Waylaid Crates" },
+    ptBR = { tab = "Writ Prof", header = "Profissão de Escrituras", profession = "Profissão", all = "Todas", find = "Filtrar nomes", search = "Pesquisar selecionadas", hint = "Marque as escrituras e clique em Pesquisar para buscar escrituras, itens e receitas. Clique na linha para buscar uma escritura.", loading = "Carregando item %d...", progress = "%d/%d nomes carregados", count = "%d escrituras", empty = "Nenhuma escritura encontrada", cratesTab = "Caixotes", cratesHeader = "Caixotes de Entrega" },
     esES = { tab = "Encargos", header = "Encargos de artesano", profession = "Profesión", all = "Todas", find = "Filtrar nombres", search = "Buscar encargos filtrados", hint = "Haz clic en un encargo para buscarlo en Auctionator.", loading = "Cargando objeto %d...", progress = "%d/%d nombres cargados", count = "%d encargos", empty = "No hay encargos" },
     frFR = { tab = "Commandes", header = "Commandes d'artisan", profession = "Métier", all = "Tous", find = "Filtrer les noms", search = "Chercher les commandes", hint = "Cliquez sur une commande pour la rechercher dans Auctionator.", loading = "Chargement de l'objet %d...", progress = "%d/%d noms chargés", count = "%d commandes", empty = "Aucune commande" },
     deDE = { tab = "Aufträge", header = "Handwerkeraufträge", profession = "Beruf", all = "Alle", find = "Namen filtern", search = "Aufträge suchen", hint = "Auftrag anklicken, um ihn in Auctionator zu suchen.", loading = "Lade Gegenstand %d...", progress = "%d/%d Namen geladen", count = "%d Aufträge", empty = "Keine Aufträge gefunden" },
@@ -75,20 +75,56 @@ local ui = {
 ui.enGB = ui.enUS
 ui.esMX = ui.esES
 
+for _, localeText in pairs(ui) do
+    localeText.tab = "Writ Prof"
+    localeText.cratesTab = localeText.cratesTab or ui.enUS.cratesTab
+    localeText.cratesHeader = localeText.cratesHeader or ui.enUS.cratesHeader
+end
+
 local filterUI = {
     enUS = {
         reputationFilter = "Reputation", skillFilter = "Crafting skill", skillUpTo = "Up to %d",
+        continentFilter = "Continent", continentKalimdor = "Kalimdor", continentEasternKingdoms = "Eastern Kingdoms",
+        regionFilter = "Region", regionAll = "All regions",
         selectVisible = "Select visible", selectedCount = "%d selected", searchSelected = "Search selected (%d)",
+        showWrits = "Show writs", showCrates = "Show crates",
+        writSection = "Craftsman's Writs", crateSection = "Waylaid Crates",
+        combinedEmpty = "No matching writs or crates",
         newsButton = "What's new", newsTitle = "Writ Profession update", newsClose = "Got it!",
-        newsIntro = "Hello! You can now select just the writs you want to search for. With one click, Auctionator looks for the selected writs, their crafted items, and buyable recipes together. Your filters are here to help you narrow down the list.",
-        newsDetails = "We're also working on the delivery locations. So far, we've tracked down where to turn in 107 of the 150 writs. The other 43 still need confirmation. Some writs share the same NPC, and information about WoW Forever isn't always complete. That's why some entries say 'Not confirmed' for now. We'd rather be upfront than send you to the wrong place. If you discover one of the missing locations, please share it with us. Every bit of help makes the addon better. Thanks for being here!",
+        newsIntro = "Hello! Writs and all 30 Waylaid Crates now share the Writ Prof tab. Use the checkboxes to show or hide each section. You can still select the writs you want and search for their required items and recipes together in Auctionator. Crates include filters for material type and tier, plus their Favor and silver turn-in rewards.",
+        newsDetails = "Click a crate to search for it in Auctionator. Apprentice, Journeyman and Expert payouts are confirmed. Artisan crates give 20 Favor when white and 40 when green. Their silver payouts are estimated at 10s and 20s and marked with ~ until confirmed. We're also working on the writ delivery locations. So far, we've tracked down where to turn in 107 of the 150 writs. The other 43 still need confirmation. Some writs share the same NPC, and information about WoW Forever isn't always complete. That's why some entries say 'Not confirmed' for now. We'd rather be upfront than send you to the wrong place. If you discover one of the missing locations, please share it with us. Every bit of help makes the addon better. Thanks for being here!",
+        crateFilterType = "Crate type", crateFilterTier = "Tier", crateFilterMoney = "Money", crateTypeAll = "All types",
+        crateMoneyAll = "Any amount", crateMoneyUpTo5 = "Up to 5 silver", crateMoney5To10 = "Over 5 to 10 silver", crateMoneyOver10 = "Over 10 silver",
+        crateTypeHerbs = "Herbs", crateTypeOre = "Ore", crateTypeTextiles = "Textiles",
+        crateTypeCuriosities = "Curiosities", crateTypeFabrics = "Fabrics", crateTypeIngots = "Ingots", crateTypeParts = "Parts",
+        crateTierAll = "All tiers", crateTierApprentice = "Apprentice", crateTierJourneyman = "Journeyman",
+        crateTierExpert = "Expert", crateTierArtisan = "Artisan", crateReward = "Turn-in reward",
+        crateNameColumn = "Crate", crateFavorShort = "Favor", crateMoneyColumn = "Money", crateUnknown = "Not confirmed", crateEstimated = "estimated",
+        crateCount = "%d crates", crateEmpty = "No matching crates",
+        crateHint = "Choose a material type, tier and silver amount. Click a crate to search it in Auctionator. Hover over it to see its materials and reward.",
+        crateLoading = "Loading item %d...",
     },
     ptBR = {
         reputationFilter = "Reputação", skillFilter = "Habilidade da profissão", skillUpTo = "Até %d",
+        continentFilter = "Continente", continentKalimdor = "Kalimdor", continentEasternKingdoms = "Reinos do Leste",
+        regionFilter = "Região", regionAll = "Todas as regiões",
         selectVisible = "Selecionar visíveis", selectedCount = "%d selecionadas", searchSelected = "Pesquisar (%d)",
+        showWrits = "Mostrar escrituras", showCrates = "Mostrar caixotes",
+        writSection = "Escrituras do Artífice", crateSection = "Caixotes de Entrega",
+        combinedEmpty = "Nenhuma escritura ou caixote encontrado",
         newsButton = "Novidades", newsTitle = "Novidades do Writ Profession", newsClose = "Entendi!",
-        newsIntro = "Oi! Agora você pode marcar só as escrituras que quer procurar. Com um clique, o Auctionator pesquisa as escrituras selecionadas, os itens necessários e as receitas que podem ser compradas. Use os filtros para encontrar o que precisa com mais facilidade.",
-        newsDetails = "Também seguimos procurando os locais de entrega. Já encontramos o destino de 107 das 150 escrituras, mas ainda faltam 43 para confirmar. Algumas são entregues ao mesmo NPC e nem sempre as informações disponíveis sobre o WoW Forever mostram todos os detalhes. Por isso, em algumas delas você vai encontrar 'Ainda não confirmado'. Preferimos ser sinceros a mandar você para o lugar errado. Se descobrir algum local que está faltando, conte pra gente! Cada ajuda faz diferença. Obrigado por acompanhar o projeto!",
+        newsIntro = "Oi! As escrituras e os 30 caixotes de entrega agora ficam juntos na aba Writ Prof. Use as caixas de seleção para mostrar ou ocultar cada seção. Você ainda pode marcar as escrituras desejadas e pesquisar de uma vez os itens necessários e as receitas no Auctionator. Os caixotes têm filtros por tipo de material e faixa, além das recompensas em Favor Mercantil e prata.",
+        newsDetails = "Clique em um caixote para pesquisá-lo no Auctionator. As recompensas de Aprendiz, Profissional e Especialista estão confirmadas. Os caixotes de Artífice dão 20 de Favor nos brancos e 40 nos verdes. A prata é estimada em 10 pratas nos brancos e 20 nos verdes e aparece com ~ até ser confirmada. Também seguimos procurando os locais de entrega das escrituras. Já encontramos o destino de 107 das 150 escrituras, mas ainda faltam 43 para confirmar. Algumas são entregues ao mesmo NPC e nem sempre as informações disponíveis sobre o WoW Forever mostram todos os detalhes. Por isso, em algumas delas você vai encontrar 'Ainda não confirmado'. Preferimos ser sinceros a mandar você para o lugar errado. Se descobrir algum local que está faltando, conte pra gente! Cada ajuda faz diferença. Obrigado por acompanhar o projeto!",
+        crateFilterType = "Tipo de caixote", crateFilterTier = "Faixa", crateFilterMoney = "Moedas", crateTypeAll = "Todos os tipos",
+        crateMoneyAll = "Qualquer valor", crateMoneyUpTo5 = "Até 5 pratas", crateMoney5To10 = "Acima de 5 até 10 pratas", crateMoneyOver10 = "Acima de 10 pratas",
+        crateTypeHerbs = "Ervas", crateTypeOre = "Minério", crateTypeTextiles = "Têxteis",
+        crateTypeCuriosities = "Curiosidades", crateTypeFabrics = "Tecidos", crateTypeIngots = "Lingotes", crateTypeParts = "Peças",
+        crateTierAll = "Todas as faixas", crateTierApprentice = "Aprendiz", crateTierJourneyman = "Profissional",
+        crateTierExpert = "Especialista", crateTierArtisan = "Artífice", crateReward = "Recompensa por entrega",
+        crateNameColumn = "Caixote", crateFavorShort = "Favor", crateMoneyColumn = "Prata", crateUnknown = "A confirmar", crateEstimated = "estimado",
+        crateCount = "%d caixotes", crateEmpty = "Nenhum caixote encontrado",
+        crateHint = "Escolha o tipo de material, a faixa e o valor em moedas. Clique em um caixote para pesquisá-lo no Auctionator. Passe o mouse para ver os materiais e a recompensa.",
+        crateLoading = "Carregando item %d...",
     },
     esES = { reputationFilter = "Reputación", skillFilter = "Habilidad profesional", skillUpTo = "Hasta %d", selectVisible = "Seleccionar visibles", selectedCount = "%d seleccionados", searchSelected = "Buscar (%d)", newsButton = "Novedades", newsTitle = "Actualización de Writ Profession", newsClose = "Entendido" },
     frFR = { reputationFilter = "Réputation", skillFilter = "Compétence", skillUpTo = "Jusqu'à %d", selectVisible = "Tout sélectionner (visible)", selectedCount = "%d sélectionnées", searchSelected = "Rechercher (%d)", newsButton = "Nouveautés", newsTitle = "Mise à jour Writ Profession", newsClose = "Compris" },
